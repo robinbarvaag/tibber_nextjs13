@@ -7,7 +7,7 @@ export default async function CurrentElectricalPrice(
 ) {
   if (req.query.year === "2022") {
     const tibber_cost_response: Response = await fetch(
-      "http://localhost:3000/api/tibber/tibber-prices",
+      `${process.env.NEXT_PUBLIC_API_URL}api/tibber/tibber-prices`,
       {
         method: "GET",
         headers: {
@@ -43,10 +43,6 @@ export default async function CurrentElectricalPrice(
       data.data.viewer.homes[0].consumption?.nodes.filter(
         (node) => node.from.substring(5, 7) === "12"
       ) ?? [];
-
-    console.log(septemberPrices.coveredPriceInclTax);
-
-    console.log();
 
     return res.status(200).json([
       {
@@ -86,7 +82,7 @@ export default async function CurrentElectricalPrice(
 
   if (req.query.year === "2023") {
     const tibber_cost_response: Response = await fetch(
-      "http://localhost:3000/api/tibber/tibber-prices",
+      `${process.env.NEXT_PUBLIC_API_URL}/api/tibber/tibber-prices`,
       {
         method: "GET",
         headers: {
@@ -136,7 +132,7 @@ export default async function CurrentElectricalPrice(
 
 async function fetchForMonth(month: string, year: string) {
   const cost_price_response = await fetch(
-    `http://localhost:3000/api/hvakosterstrom/fetch-prices-for-month?month=${month}&year=${year}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/hvakosterstrom/fetch-prices-for-month?month=${month}&year=${year}`,
     {
       method: "GET",
       headers: {
