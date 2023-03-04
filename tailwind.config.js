@@ -24,6 +24,11 @@ module.exports = {
           orange: "#F5A623",
           violet: "#7928CA",
         },
+        theme1: {
+          primary: "#2E86AB",
+          secondary: "#E8E8E8",
+          gray: "#FBFBFB",
+        },
       },
       backgroundImage: ({ theme }) => ({
         "vc-border-gradient": `radial-gradient(at left top, ${theme(

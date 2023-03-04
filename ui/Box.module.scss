@@ -1,0 +1,47 @@
+.hover-box {
+  $wrapper: &;
+  cursor: pointer;
+
+  img {
+    filter: grayscale(1);
+  }
+
+  &__button {
+    transition: all;
+    transition-duration: 500ms;
+    height: 40px;
+    width: 40px;
+    background-color: var(--color);
+    align-self: flex-end;
+    border-radius: 99999px;
+    display: block;
+    opacity: 0;
+  }
+
+  &:hover {
+    #{$wrapper}__button {
+      transform: scaleX(30) scaleY(30);
+      opacity: 1;
+    }
+
+    #{$wrapper}__content {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    #{$wrapper} {
+      img {
+        filter: grayscale(0);
+      }
+      filter: grayscale(0);
+    }
+  }
+
+  &__content {
+    transition: all;
+    transition-duration: 500ms;
+    position: absolute;
+    left: 55%;
+    opacity: 0;
+  }
+}
