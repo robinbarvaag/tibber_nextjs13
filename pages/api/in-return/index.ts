@@ -107,6 +107,11 @@ export default async function CurrentElectricalPrice(
         (node) => node.from.substring(5, 7) === "02"
       ) ?? [];
 
+    var consumptionForMarch =
+      data.data.viewer.homes[0].consumption?.nodes.filter(
+        (node) => node.from.substring(5, 7) === "03"
+      ) ?? [];
+
     return res.status(200).json([
       {
         month: "Januar",
@@ -121,6 +126,14 @@ export default async function CurrentElectricalPrice(
         whatwepay: consumptionForFebruary[0].cost,
         whattheypay:
           (consumptionForFebruary[0].consumption *
+            februaryPrices.coveredPriceInclTax) /
+          100,
+      },
+      {
+        month: "March",
+        whatwepay: consumptionForMarch[0].cost,
+        whattheypay:
+          (consumptionForMarch[0].consumption *
             februaryPrices.coveredPriceInclTax) /
           100,
       },
