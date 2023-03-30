@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import classes from "./box.module.scss";
+import classes from "./Box.module.scss";
 
 export const Box = ({ color }: { color: string }) => {
   return (
