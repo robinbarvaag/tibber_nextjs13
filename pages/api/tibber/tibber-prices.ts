@@ -75,7 +75,7 @@ export const getCurrentEnergyPrice = async (): Promise<any> => {
   return data;
 };
 
-export default async function CurrentElectricalPrice(
+export default async function index(
   req: NextApiRequest,
   res: NextApiResponse<TibberData>
 ) {
