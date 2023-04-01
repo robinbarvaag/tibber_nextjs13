@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { TibberData } from "../tibber/tibber-prices";
+import monthData from "./../../../data/prices.json";
 
 var monthNames = [
   "January",
@@ -50,17 +51,40 @@ export default async function index(
     }
   );
 
-  const tibberData: TibberData = await tibber_cost_response.json();
-  const priceForYear: PricePerYear[] = [];
+  try {
+    const tibberData: TibberData = await tibber_cost_response.json();
+    const priceForYear: PricePerYear[] = [];
 
-  if (req.query.year === "2022") {
-    for (const month of ["11"]) {
-      const prices = await fetchForMonth(month, req.query.year as string);
-      priceForYear.push({
-        month: monthNames[parseInt(month) - 1],
-        prices: prices.coveredPriceInclTax,
-        monthNumber: month,
-      });
+    if (req.query.year === "2022") {
+      for (const month of ["09", "10", "11", "12"]) {
+        const prices = monthData.filter(
+          (x) => x.month === month && x.year === req.query.year
+        )[0];
+        priceForYear.push({
+          month: monthNames[parseInt(month) - 1],
+          prices: prices?.coveredPriceInclTax ?? 0,
+          monthNumber: month,
+        });
+      }
+    }
+
+    if (req.query.year === "2023") {
+      for (const month of monthNumber) {
+        if (
+          req.query.year === "2023" &&
+          parseInt(month) > new Date().getMonth() + 1
+        ) {
+          continue;
+        }
+        const prices = monthData.filter(
+          (x) => x.month === month && x.year === req.query.year
+        )[0];
+        priceForYear.push({
+          month: monthNames[parseInt(month) - 1],
+          prices: prices?.coveredPriceInclTax ?? 0,
+          monthNumber: month,
+        });
+      }
     }
 
     const typedReturn = priceForYear.map((x) => {
@@ -77,56 +101,6 @@ export default async function index(
     });
 
     return res.status(200).json(typedReturn);
-  }
-
-  try {
-    return res.status(200).json([
-      {
-        month: "January",
-        whatwepay: 0,
-        whattheypay: 0,
-      },
-    ]);
-
-    // const tibberData: TibberData = await tibber_cost_response.json();
-    // const priceForYear: PricePerYear[] = [];
-
-    // if (req.query.year === "2022") {
-    //   for (const month of ["09", "10", "11", "12"]) {
-    //     const prices = await fetchForMonth(month, req.query.year as string);
-    //     priceForYear.push({
-    //       month: monthNames[parseInt(month) - 1],
-    //       prices: prices.coveredPriceInclTax,
-    //       monthNumber: month,
-    //     });
-    //   }
-    // }
-
-    // if (req.query.year === "2023") {
-    //   for (const month of monthNumber) {
-    //     const prices = await fetchForMonth(month, req.query.year as string);
-    //     priceForYear.push({
-    //       month: monthNames[parseInt(month) - 1],
-    //       prices: prices.coveredPriceInclTax,
-    //       monthNumber: month,
-    //     });
-    //   }
-    // }
-
-    // const typedReturn = priceForYear.map((x) => {
-    //   var consumptionForMonth =
-    //     tibberData.data.viewer.homes[0].consumption?.nodes.filter(
-    //       (node) => node.from.substring(5, 7) === x.monthNumber
-    //     ) ?? [];
-    //   return {
-    //     month: x.month,
-    //     whatwepay: consumptionForMonth[0]?.cost ?? 0,
-    //     whattheypay:
-    //       ((consumptionForMonth[0]?.consumption ?? 0) * x.prices) / 100,
-    //   };
-    // });
-
-    // return res.status(200).json(typedReturn);
   } catch (error) {
     console.log(error);
   }
@@ -134,16 +108,7 @@ export default async function index(
 
 async function fetchForMonth(month: string, year: string) {
   try {
-    const cost_price_response = await fetch(
-      `https://tibber-nextjs13.vercel.app/api/hvakosterstrom/fetch-prices-for-month?month=${month}&year=${year}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return await cost_price_response.json();
+    return monthData.filter((x) => x.month === month && x.year === year)[0];
   } catch (e) {
     console.log(e);
   }
