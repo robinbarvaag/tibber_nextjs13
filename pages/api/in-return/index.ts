@@ -54,7 +54,7 @@ export default async function index(
   const priceForYear: PricePerYear[] = [];
 
   if (req.query.year === "2022") {
-    for (const month of ["09"]) {
+    for (const month of ["09", "10"]) {
       const prices = await fetchForMonth(month, req.query.year as string);
       priceForYear.push({
         month: monthNames[parseInt(month) - 1],
