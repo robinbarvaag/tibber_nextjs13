@@ -62,6 +62,21 @@ export default async function index(
         monthNumber: month,
       });
     }
+
+    const typedReturn = priceForYear.map((x) => {
+      var consumptionForMonth =
+        tibberData.data.viewer.homes[0].consumption?.nodes.filter(
+          (node) => node.from.substring(5, 7) === x.monthNumber
+        ) ?? [];
+      return {
+        month: x.month,
+        whatwepay: consumptionForMonth[0]?.cost ?? 0,
+        whattheypay:
+          ((consumptionForMonth[0]?.consumption ?? 0) * x.prices) / 100,
+      };
+    });
+
+    return res.status(200).json(typedReturn);
   }
 
   try {
