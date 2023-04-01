@@ -40,6 +40,16 @@ export default async function index(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
+  const tibber_cost_response: Response = await fetch(
+    `https://tibber-nextjs13.vercel.app/api/tibber/tibber-prices`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
   try {
     return res.status(200).json([
       {
@@ -48,16 +58,6 @@ export default async function index(
         whattheypay: 0,
       },
     ]);
-
-    // const tibber_cost_response: Response = await fetch(
-    //   `https://tibber-nextjs13.vercel.app/api/tibber/tibber-prices`,
-    //   {
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   }
-    // );
 
     // const tibberData: TibberData = await tibber_cost_response.json();
     // const priceForYear: PricePerYear[] = [];
