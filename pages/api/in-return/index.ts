@@ -50,6 +50,8 @@ export default async function index(
     }
   );
 
+  const tibberData: TibberData = await tibber_cost_response.json();
+
   try {
     return res.status(200).json([
       {
