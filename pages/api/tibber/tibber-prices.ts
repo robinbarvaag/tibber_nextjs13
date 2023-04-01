@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export interface Pokedex {
+export interface TibberData {
   data: Data;
 }
 
@@ -70,14 +70,14 @@ export const getCurrentEnergyPrice = async (): Promise<any> => {
     body: JSON.stringify(currentEnergyPriceQuery),
   });
 
-  const data: Pokedex = await res.json();
+  const data: TibberData = await res.json();
 
   return data;
 };
 
 export default async function CurrentElectricalPrice(
   req: NextApiRequest,
-  res: NextApiResponse<Pokedex>
+  res: NextApiResponse<TibberData>
 ) {
   const homeData = await getCurrentEnergyPrice();
 

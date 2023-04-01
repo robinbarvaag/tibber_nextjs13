@@ -1,157 +1,96 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Pokedex } from "../tibber/tibber-prices";
+import { TibberData } from "../tibber/tibber-prices";
 
-export default async function CurrentElectricalPrice(
+var monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+var monthNumber = [
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+];
+
+export type PricePerYear = {
+  month: string;
+  monthNumber: string;
+  prices: number;
+};
+
+export default async function index(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
   try {
+    const tibber_cost_response: Response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}api/tibber/tibber-prices`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        next: { revalidate: 600 },
+      }
+    );
+
+    const tibberData: TibberData = await tibber_cost_response.json();
+    const priceForYear: PricePerYear[] = [];
+
     if (req.query.year === "2022") {
-      const tibber_cost_response: Response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}api/tibber/tibber-prices`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          next: { revalidate: 600 },
-        }
-      );
-
-      const data: Pokedex = await tibber_cost_response.json();
-
-      const septemberPrices = await fetchForMonth(
-        "09",
-        req.query.year as string
-      );
-      const oktoberPrices = await fetchForMonth("10", req.query.year as string);
-      const novemberPrices = await fetchForMonth(
-        "11",
-        req.query.year as string
-      );
-      const desemberPrices = await fetchForMonth(
-        "12",
-        req.query.year as string
-      );
-
-      var consumptionForSep =
-        data.data.viewer.homes[0].consumption?.nodes.filter(
-          (node) => node.from.substring(5, 7) === "09"
-        ) ?? [];
-
-      var consumptionForOkt =
-        data.data.viewer.homes[0].consumption?.nodes.filter(
-          (node) => node.from.substring(5, 7) === "10"
-        ) ?? [];
-
-      var consumptionForNob =
-        data.data.viewer.homes[0].consumption?.nodes.filter(
-          (node) => node.from.substring(5, 7) === "11"
-        ) ?? [];
-
-      var consumptionForDes =
-        data.data.viewer.homes[0].consumption?.nodes.filter(
-          (node) => node.from.substring(5, 7) === "12"
-        ) ?? [];
-
-      return res.status(200).json([
-        {
-          month: "September",
-          whatwepay: consumptionForSep[0].cost,
-          whattheypay:
-            (consumptionForSep[0].consumption *
-              septemberPrices.coveredPriceInclTax) /
-            100,
-        },
-        {
-          month: "Oktober",
-          whatwepay: consumptionForOkt[0].cost,
-          whattheypay:
-            (consumptionForOkt[0].consumption *
-              oktoberPrices.coveredPriceInclTax) /
-            100,
-        },
-        {
-          month: "November",
-          whatwepay: consumptionForNob[0].cost,
-          whattheypay:
-            (consumptionForNob[0].consumption *
-              novemberPrices.coveredPriceInclTax) /
-            100,
-        },
-        {
-          month: "Desember",
-          whatwepay: consumptionForDes[0].cost,
-          whattheypay:
-            (consumptionForDes[0].consumption *
-              desemberPrices.coveredPriceInclTax) /
-            100,
-        },
-      ]);
+      for (const month of ["09", "10", "11", "12"]) {
+        const prices = await fetchForMonth(month, req.query.year as string);
+        priceForYear.push({
+          month: monthNames[parseInt(month) - 1],
+          prices: prices.coveredPriceInclTax,
+          monthNumber: month,
+        });
+      }
     }
 
     if (req.query.year === "2023") {
-      const tibber_cost_response: Response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tibber/tibber-prices`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          next: { revalidate: 600 },
-        }
-      );
-
-      const data: Pokedex = await tibber_cost_response.json();
-
-      const januarPrices = await fetchForMonth("01", req.query.year as string);
-      const februaryPrices = await fetchForMonth(
-        "02",
-        req.query.year as string
-      );
-
-      var consumptionForJanuary =
-        data.data.viewer.homes[0].consumption?.nodes.filter(
-          (node) => node.from.substring(5, 7) === "01"
-        ) ?? [];
-
-      var consumptionForFebruary =
-        data.data.viewer.homes[0].consumption?.nodes.filter(
-          (node) => node.from.substring(5, 7) === "02"
-        ) ?? [];
-
-      var consumptionForMarch =
-        data.data.viewer.homes[0].consumption?.nodes.filter(
-          (node) => node.from.substring(5, 7) === "03"
-        ) ?? [];
-
-      return res.status(200).json([
-        {
-          month: "Januar",
-          whatwepay: consumptionForJanuary[0].cost,
-          whattheypay:
-            (consumptionForJanuary[0].consumption *
-              januarPrices.coveredPriceInclTax) /
-            100,
-        },
-        {
-          month: "Februar",
-          whatwepay: consumptionForFebruary[0].cost,
-          whattheypay:
-            (consumptionForFebruary[0].consumption *
-              februaryPrices.coveredPriceInclTax) /
-            100,
-        },
-        {
-          month: "March",
-          whatwepay: consumptionForMarch[0].cost,
-          whattheypay:
-            (consumptionForMarch[0].consumption *
-              februaryPrices.coveredPriceInclTax) /
-            100,
-        },
-      ]);
+      for (const month of monthNumber) {
+        const prices = await fetchForMonth(month, req.query.year as string);
+        priceForYear.push({
+          month: monthNames[parseInt(month) - 1],
+          prices: prices.coveredPriceInclTax,
+          monthNumber: month,
+        });
+      }
     }
+
+    const typedReturn = priceForYear.map((x) => {
+      var consumptionForMonth =
+        tibberData.data.viewer.homes[0].consumption?.nodes.filter(
+          (node) => node.from.substring(5, 7) === x.monthNumber
+        ) ?? [];
+      return {
+        month: x.month,
+        whatwepay: consumptionForMonth[0]?.cost ?? 0,
+        whattheypay:
+          ((consumptionForMonth[0]?.consumption ?? 0) * x.prices) / 100,
+      };
+    });
+
+    return res.status(200).json(typedReturn);
   } catch (error) {
     console.log(error);
   }

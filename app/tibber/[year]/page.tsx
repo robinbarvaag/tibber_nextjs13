@@ -8,9 +8,9 @@ export const revalidate = 60;
 
 async function getData(year: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}api/in-return?month=09&year=${year}`,
+    `${process.env.NEXT_PUBLIC_API_URL}api/in-return?year=${year}`,
     {
-      next: { revalidate: 60 },
+      next: { revalidate: 600 },
     }
   );
   // Recommendation: handle errors
