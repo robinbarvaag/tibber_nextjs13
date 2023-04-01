@@ -42,18 +42,27 @@ export default async function index(
 ) {
   try {
     const tibber_cost_response: Response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}api/tibber/tibber-prices`,
+      `https://tibber-nextjs13.vercel.app/api/tibber/tibber-prices`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        next: { revalidate: 600 },
       }
     );
 
     const tibberData: TibberData = await tibber_cost_response.json();
     const priceForYear: PricePerYear[] = [];
+
+    if (req.query.year === "2021") {
+      return [
+        {
+          month: "January",
+          whatwepay: 0,
+          whattheypay: 0,
+        },
+      ];
+    }
 
     if (req.query.year === "2022") {
       for (const month of ["09", "10", "11", "12"]) {
@@ -99,7 +108,7 @@ export default async function index(
 async function fetchForMonth(month: string, year: string) {
   try {
     const cost_price_response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/hvakosterstrom/fetch-prices-for-month?month=${month}&year=${year}`,
+      `https://tibber-nextjs13.vercel.app/api/hvakosterstrom/fetch-prices-for-month?month=${month}&year=${year}`,
       {
         method: "GET",
         headers: {
