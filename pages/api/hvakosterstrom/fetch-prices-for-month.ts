@@ -19,7 +19,10 @@ var monthNumber = [
 
 var years = ["2022", "2023"];
 
-export default async function index(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   res.setHeader("Cache-Control", "s-maxage=86400");
   const pricesEachYear: any[] = [];
   for (const year of years) {

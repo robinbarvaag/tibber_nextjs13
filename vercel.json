@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/hvakosterstrom/fetch-prices-for-month/",
+      "schedule": "0 10 * * *"
+    }
+  ]
+}
