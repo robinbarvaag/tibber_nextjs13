@@ -30,6 +30,6 @@ export default async function index(
 
     return res.status(200).json(completion.data.choices[0].text);
   } catch (error) {
-    return res.status(200).json({ error: error, key: OPENAI_API_KEY });
+    return res.status(200).json(error);
   }
 }
