@@ -12,22 +12,19 @@ async function getData() {
 }
 
 export default async function PlantRecommendations() {
-  const data = await getData();
-
-  const dataFromChild = "";
+  //const data = await getData();
+  console.log(process.env.NEXT_PUBLIC_API_URL);
 
   return (
     <div>
       <h2>Plant Recommendations</h2>
 
       <ZoneSelector />
-
-      <span>Hello {dataFromChild}</span>
-      <div
+      {/* <div
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(data).replace("\\n\\nI", ""),
         }}
-      />
+      /> */}
     </div>
   );
 }
