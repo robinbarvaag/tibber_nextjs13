@@ -1,6 +1,7 @@
 .hover-box {
   $wrapper: &;
   cursor: pointer;
+  padding: 20px 0;
 
   img {
     filter: grayscale(1);
@@ -29,10 +30,7 @@
       z-index: 2;
     }
 
-    #{$wrapper} {
-      img {
-        filter: grayscale(0);
-      }
+    #{$wrapper}__img {
       filter: grayscale(0);
     }
   }

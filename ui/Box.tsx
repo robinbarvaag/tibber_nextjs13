@@ -3,7 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 import classes from "./Box.module.scss";
 
-export const Box = ({ color }: { color: string }) => {
+export const Box = ({
+  color,
+  image,
+  altText,
+  readMore,
+  link,
+}: {
+  color: string;
+  image: string;
+  altText?: string;
+  readMore?: string;
+  link: string;
+}) => {
   return (
     <div className={classes["hover-box"]}>
       <div
@@ -13,8 +25,9 @@ export const Box = ({ color }: { color: string }) => {
       >
         <div className="relative w-60 h-60">
           <Image
-            src="/tibber_logo_blue_w1000.png"
-            alt="Tibber logo"
+            className={classes["hover-box__img"]}
+            src={image}
+            alt={altText ?? "Missing alt-text"}
             fill
             style={{ aspectRatio: "16/9", objectFit: "contain" }}
           />
@@ -29,10 +42,10 @@ export const Box = ({ color }: { color: string }) => {
         ></button>
         <div className={classes["hover-box__content"]}>
           <h1 className="text-2xl">Tibber</h1>
-          <p className="mt-4">Read more info about usage from Tibber</p>
+          <p className="mt-4">{readMore}</p>
           <Link
             className="text-black text-2xl border-b-pink-600 border-b-2"
-            href="tibber/2023"
+            href={link}
           >
             See more here
           </Link>
