@@ -58,12 +58,12 @@ export default function Page() {
 
       <h2 className="text-xl">4. Disclaimer of Warranties</h2>
       <p className="my-2">
-        Our website is provided on an "as is" and "as available" basis without
-        any warranties of any kind, whether express or implied. We do not
-        warrant that our website will be error-free, uninterrupted, secure, or
-        free from viruses or other harmful components. We make no guarantees
-        regarding the accuracy, timeliness, reliability, or completeness of any
-        information on the website.
+        Our website is provided on an `&quot;as is`&quot; and `&quot;as
+        available`&quot; basis without any warranties of any kind, whether
+        express or implied. We do not warrant that our website will be
+        error-free, uninterrupted, secure, or free from viruses or other harmful
+        components. We make no guarantees regarding the accuracy, timeliness,
+        reliability, or completeness of any information on the website.
       </p>
 
       <h2 className="text-xl">5. Limitation of Liability</h2>
