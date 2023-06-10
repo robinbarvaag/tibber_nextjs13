@@ -54,7 +54,7 @@ function Byline() {
         <a
           rel="noopener noreferrer"
           className="underline decoration-dotted underline-offset-4 hover:text-gray-400"
-          href="https://github.com/vercel/app-playground"
+          href="https://github.com/robinbarvaag/tibber_nextjs13"
           target="_blank"
         >
           View code
@@ -66,7 +66,7 @@ function Byline() {
           href="https://vercel.com/templates/next.js/app-directory"
           target="_blank"
         >
-          deploy your own
+          create your own from the template i used
         </a>
       </div>
     </div>
