@@ -6,6 +6,10 @@ async function getData(year: number) {
     { cache: "no-store" }
   );
 
+  if (res === undefined) {
+    return undefined;
+  }
+
   const responseBody = await res.json();
   //find object that contains total amount for year
   const totalAmount = responseBody.find((item: any) => item.month === "Total");
