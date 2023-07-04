@@ -10,7 +10,7 @@ async function getData(year: string) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}api/in-return?year=${year}`,
     {
-      next: { revalidate: 600 },
+      next: { revalidate: 10 },
     }
   );
   // Recommendation: handle errors
