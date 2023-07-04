@@ -43,7 +43,6 @@ export default async function handler(
           headers: {
             "Content-Type": "application/json",
           },
-          next: { revalidate: 600 },
         }).then((res) => {
           if (res.status !== 200) {
             return [];
@@ -55,42 +54,27 @@ export default async function handler(
         responseArray.push(...response);
       }
 
-      //get the sum of all prices
-      let sum = 0;
+      //averge price this month
+      let averageSumThisMonth = 0;
       responseArray.forEach((element) => {
-        sum += element.NOK_per_kWh * 100;
+        averageSumThisMonth += element.NOK_per_kWh;
       });
+
+      averageSumThisMonth = averageSumThisMonth / responseArray.length;
 
       let sumBeingCovered = 0;
       responseArray.forEach((element) => {
-        const inOrer = element.NOK_per_kWh * 100;
-        const beingCovered = inOrer - 70;
+        //cover is only 90% for everything above 70 øre
+        const beingCovered = (element.NOK_per_kWh - 0.7) * 0.9;
         sumBeingCovered += beingCovered;
       });
 
-      const coveredPriceExclTax =
-        (sumBeingCovered / responseArray.length) * 0.9;
-      const coveredPriceInclTax = coveredPriceExclTax * 1.25;
+      sumBeingCovered = sumBeingCovered / responseArray.length;
 
-      // console.log("covered excl mva", coveredPriceExclTax);
-      // console.log("covered incl mva", coveredPriceInclTax);
-
-      const averageExclTax = sum / responseArray.length;
-      const avargePriceInclTax = averageExclTax * 1.25;
-
-      const afterCoveredPrice = avargePriceInclTax - coveredPriceInclTax;
-
-      // console.log("To-pay per kwh incl tax", afterCoveredPrice);
-      // const whatWeShouldPay = (afterCoveredPrice * 2789) / 100;
-      // const whatWeArePaying = 10836;
-      // console.log("What we should pay in desember", whatWeShouldPay);
-      // console.log("Total we are getting back", whatWeArePaying - whatWeShouldPay);
-
-      // res.status(200).json({ coveredPriceInclTax: coveredPriceInclTax } as any);
       pricesEachYear.push({
         year: year,
         month: month,
-        coveredPriceInclTax: afterCoveredPrice,
+        coveredPriceInclTax: sumBeingCovered < 0 ? 0 : sumBeingCovered * 1.25,
       });
     }
   }

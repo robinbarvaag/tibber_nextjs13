@@ -95,21 +95,12 @@ export default async function index(
       return {
         month: x.month,
         whatwepay: consumptionForMonth[0]?.cost ?? 0,
-        whattheypay:
-          ((consumptionForMonth[0]?.consumption ?? 0) * x.prices) / 100,
+        whattheypay: (consumptionForMonth[0]?.consumption ?? 0) * x.prices,
       };
     });
 
     return res.status(200).json(typedReturn);
   } catch (error) {
     console.log(error);
-  }
-}
-
-async function fetchForMonth(month: string, year: string) {
-  try {
-    return monthData.filter((x) => x.month === month && x.year === year)[0];
-  } catch (e) {
-    console.log(e);
   }
 }
