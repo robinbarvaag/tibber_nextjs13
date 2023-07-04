@@ -1,21 +1,116 @@
 [
-  { "year": "2022", "month": "01", "coveredPriceInclTax": 0.7548133820564512 },
-  { "year": "2022", "month": "02", "coveredPriceInclTax": 0.5633153236607141 },
-  { "year": "2022", "month": "03", "coveredPriceInclTax": 1.3176900908479126 },
-  { "year": "2022", "month": "04", "coveredPriceInclTax": 1.1728657968749991 },
-  { "year": "2022", "month": "05", "coveredPriceInclTax": 1.0684725907258072 },
-  { "year": "2022", "month": "06", "coveredPriceInclTax": 0.9009770468749998 },
-  { "year": "2022", "month": "07", "coveredPriceInclTax": 1.0866617540322576 },
-  { "year": "2022", "month": "08", "coveredPriceInclTax": 3.0542854687500016 },
-  { "year": "2022", "month": "09", "coveredPriceInclTax": 3.254761859375001 },
-  { "year": "2022", "month": "10", "coveredPriceInclTax": 0.6931570469798658 },
-  { "year": "2022", "month": "11", "coveredPriceInclTax": 0.4779212187500001 },
-  { "year": "2022", "month": "12", "coveredPriceInclTax": 2.239804642137095 },
-  { "year": "2023", "month": "01", "coveredPriceInclTax": 0.6607055594758064 },
-  { "year": "2023", "month": "02", "coveredPriceInclTax": 0.4586167801339288 },
-  { "year": "2023", "month": "03", "coveredPriceInclTax": 0.4817451682368772 },
-  { "year": "2023", "month": "04", "coveredPriceInclTax": 0.48048335937500014 },
-  { "year": "2023", "month": "05", "coveredPriceInclTax": 0.10013336189516144 },
-  { "year": "2023", "month": "06", "coveredPriceInclTax": 0.03732520312500009 },
-  { "year": "2023", "month": "07", "coveredPriceInclTax": 0 }
+  {
+    "year": "2022",
+    "month": "01",
+    "coveredPriceInclTax": 0.7548133820564512,
+    "totalConveredInclTax": 449.2649249999998
+  },
+  {
+    "year": "2022",
+    "month": "02",
+    "coveredPriceInclTax": 0.5633153236607141,
+    "totalConveredInclTax": 302.8383179999999
+  },
+  {
+    "year": "2022",
+    "month": "03",
+    "coveredPriceInclTax": 1.3176900908479126,
+    "totalConveredInclTax": 783.2349899999992
+  },
+  {
+    "year": "2022",
+    "month": "04",
+    "coveredPriceInclTax": 1.1728657968749991,
+    "totalConveredInclTax": 675.5706989999995
+  },
+  {
+    "year": "2022",
+    "month": "05",
+    "coveredPriceInclTax": 1.0684725907258072,
+    "totalConveredInclTax": 635.9548860000004
+  },
+  {
+    "year": "2022",
+    "month": "06",
+    "coveredPriceInclTax": 0.9009770468749998,
+    "totalConveredInclTax": 518.9627789999998
+  },
+  {
+    "year": "2022",
+    "month": "07",
+    "coveredPriceInclTax": 1.0866617540322576,
+    "totalConveredInclTax": 646.7810759999998
+  },
+  {
+    "year": "2022",
+    "month": "08",
+    "coveredPriceInclTax": 3.0542854687500016,
+    "totalConveredInclTax": 1817.910711000001
+  },
+  {
+    "year": "2022",
+    "month": "09",
+    "coveredPriceInclTax": 3.254761859375001,
+    "totalConveredInclTax": 1874.7428310000007
+  },
+  {
+    "year": "2022",
+    "month": "10",
+    "coveredPriceInclTax": 0.6931570469798658,
+    "totalConveredInclTax": 413.1216
+  },
+  {
+    "year": "2022",
+    "month": "11",
+    "coveredPriceInclTax": 0.4779212187500001,
+    "totalConveredInclTax": 275.28262200000006
+  },
+  {
+    "year": "2022",
+    "month": "12",
+    "coveredPriceInclTax": 2.239804642137095,
+    "totalConveredInclTax": 1333.131722999999
+  },
+  {
+    "year": "2023",
+    "month": "01",
+    "coveredPriceInclTax": 0.6607055594758064,
+    "totalConveredInclTax": 393.25194899999997
+  },
+  {
+    "year": "2023",
+    "month": "02",
+    "coveredPriceInclTax": 0.4586167801339288,
+    "totalConveredInclTax": 246.5523810000001
+  },
+  {
+    "year": "2023",
+    "month": "03",
+    "coveredPriceInclTax": 0.4817451682368772,
+    "totalConveredInclTax": 286.3493279999998
+  },
+  {
+    "year": "2023",
+    "month": "04",
+    "coveredPriceInclTax": 0.48048335937500014,
+    "totalConveredInclTax": 276.75841500000007
+  },
+  {
+    "year": "2023",
+    "month": "05",
+    "coveredPriceInclTax": 0.10013336189516144,
+    "totalConveredInclTax": 59.59937700000008
+  },
+  {
+    "year": "2023",
+    "month": "06",
+    "coveredPriceInclTax": 0.03732520312500009,
+    "totalConveredInclTax": 21.49931700000005
+  },
+  {
+    "year": "2023",
+    "month": "07",
+    "coveredPriceInclTax": 0,
+    "totalConveredInclTax": 0
+  }
 ]

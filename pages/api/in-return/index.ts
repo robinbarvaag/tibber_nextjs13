@@ -35,6 +35,7 @@ export type PricePerYear = {
   month: string;
   monthNumber: string;
   prices: number;
+  totalCoveredThisMonth?: number;
 };
 
 export default async function index(
@@ -64,6 +65,7 @@ export default async function index(
           month: monthNames[parseInt(month) - 1],
           prices: prices?.coveredPriceInclTax ?? 0,
           monthNumber: month,
+          totalCoveredThisMonth: prices?.totalConveredInclTax ?? 0,
         });
       }
     }
@@ -83,6 +85,7 @@ export default async function index(
           month: monthNames[parseInt(month) - 1],
           prices: prices?.coveredPriceInclTax ?? 0,
           monthNumber: month,
+          totalCoveredThisMonth: prices?.totalConveredInclTax ?? 0,
         });
       }
     }
@@ -94,9 +97,16 @@ export default async function index(
         ) ?? [];
       return {
         month: x.month,
-        whatwepay: consumptionForMonth[0]?.cost ?? 0,
-        whattheypay: (consumptionForMonth[0]?.consumption ?? 0) * x.prices,
+        paidToTibber: consumptionForMonth[0]?.cost ?? 0,
+        powerSupport: (consumptionForMonth[0]?.consumption ?? 0) * x.prices,
       };
+    });
+
+    //also add total
+    typedReturn.push({
+      month: "Total",
+      paidToTibber: typedReturn.reduce((a, b) => a + (b.paidToTibber || 0), 0),
+      powerSupport: typedReturn.reduce((a, b) => a + (b.powerSupport || 0), 0),
     });
 
     return res.status(200).json(typedReturn);

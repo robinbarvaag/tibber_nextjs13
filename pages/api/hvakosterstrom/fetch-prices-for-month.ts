@@ -62,19 +62,21 @@ export default async function handler(
 
       averageSumThisMonth = averageSumThisMonth / responseArray.length;
 
-      let sumBeingCovered = 0;
+      let sumBeeingCovered = 0;
       responseArray.forEach((element) => {
         //cover is only 90% for everything above 70 øre
         const beingCovered = (element.NOK_per_kWh - 0.7) * 0.9;
-        sumBeingCovered += beingCovered;
+        sumBeeingCovered += beingCovered;
       });
-
-      sumBeingCovered = sumBeingCovered / responseArray.length;
+      const totalSumBeeingCovered = sumBeeingCovered;
+      sumBeeingCovered = sumBeeingCovered / responseArray.length;
 
       pricesEachYear.push({
         year: year,
         month: month,
-        coveredPriceInclTax: sumBeingCovered < 0 ? 0 : sumBeingCovered * 1.25,
+        coveredPriceInclTax: sumBeeingCovered < 0 ? 0 : sumBeeingCovered * 1.25,
+        totalConveredInclTax:
+          totalSumBeeingCovered < 0 ? 0 : totalSumBeeingCovered,
       });
     }
   }

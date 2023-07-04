@@ -1,8 +1,8 @@
 // import { RenderingInfo } from "#/ui/RenderingInfo";
 import { notFound } from "next/navigation";
-import classes from "./year.module.scss";
-import ProgressBar from "#/components/progressbar";
+import ProgressBar from "#/components/progressbar/progressbar";
 import colors from "tailwindcss/colors";
+import Link from "next/link";
 
 export const revalidate = 60;
 
@@ -32,9 +32,16 @@ export default async function Page({ params }: { params: { year: string } }) {
 
   return (
     <div className="grid grid-cols-6 gap-x-6 gap-y-3">
+      <Link
+        className="bg-gray-500 text-white font-medium flex p-2 rounded-lg justify-items-center"
+        href="/tibber"
+      >
+        Back
+      </Link>
       {data.map((monthInfo, index) => {
         const progress =
-          (monthInfo.whattheypay.toFixed(2) / monthInfo.whatwepay.toFixed(2)) *
+          (monthInfo?.powerSupport?.toFixed(2) /
+            monthInfo?.paidToTibber?.toFixed(2)) *
           100;
 
         //create an switch case for progress and change color based on progress
@@ -46,7 +53,7 @@ export default async function Page({ params }: { params: { year: string } }) {
         else indicatorColor = colors.green[600];
 
         const whatWePaid =
-          monthInfo.whatwepay.toFixed(2) - monthInfo.whattheypay.toFixed(2);
+          monthInfo.paidToTibber.toFixed(2) - monthInfo.powerSupport.toFixed(2);
 
         return (
           <div key={index} className="col-span-6 flex flex-row justify-between">
@@ -54,11 +61,11 @@ export default async function Page({ params }: { params: { year: string } }) {
               <h2 className="font-medium text-gray-500 ">{monthInfo.month}</h2>
               <div className="text-gray-500">
                 {/* Only display two numbers */}
-                Hva vi betalte til Tibber: {monthInfo.whatwepay.toFixed(2)}
+                Hva vi betalte til Tibber: {monthInfo.paidToTibber.toFixed(2)}
               </div>
               <div className="font-semibold text-gray-500">
                 Hva vi fikk igjen fra strømstøtten{" "}
-                {monthInfo.whattheypay.toFixed(2)}
+                {monthInfo.powerSupport.toFixed(2)}
               </div>
               <div className="text-gray-500">
                 Hva vi faktisk betalte i strøm: {whatWePaid.toFixed(2)}
