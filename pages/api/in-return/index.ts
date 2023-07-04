@@ -105,8 +105,8 @@ export default async function index(
     //also add total
     typedReturn.push({
       month: "Total",
-      paidToTibber: typedReturn.reduce((a, b) => a + (b.paidToTibber || 0), 0),
-      powerSupport: typedReturn.reduce((a, b) => a + (b.powerSupport || 0), 0),
+      paidToTibber: typedReturn.reduce((a, b) => a + (b?.paidToTibber || 0), 0),
+      powerSupport: typedReturn.reduce((a, b) => a + (b?.powerSupport || 0), 0),
     });
 
     return res.status(200).json(typedReturn);

@@ -11,13 +11,14 @@ async function getData(year: number) {
   const totalAmount = responseBody.find((item: any) => item.month === "Total");
   return {
     year,
-    paidToTibber: totalAmount.paidToTibber?.toFixed(2),
-    powerSupport: totalAmount.powerSupport?.toFixed(2),
+    paidToTibber: totalAmount?.paidToTibber?.toFixed(2),
+    powerSupport: totalAmount?.powerSupport?.toFixed(2),
   };
 }
 
 async function TotalYear({ year }: { year: number }): Promise<JSX.Element> {
   const item = await getData(year);
+  if (item === undefined) return <div>undefined</div>;
 
   const progress = (item?.powerSupport / item?.paidToTibber) * 100;
 
@@ -28,7 +29,7 @@ async function TotalYear({ year }: { year: number }): Promise<JSX.Element> {
   else if (progress > 30 && progress < 50) indicatorColor = colors.orange[600];
   else indicatorColor = colors.green[600];
 
-  const whatWePaid = item.paidToTibber - item.powerSupport;
+  const whatWePaid = item?.paidToTibber - item?.powerSupport;
 
   return (
     <div key={item.year} className="col-span-6 flex flex-row justify-between">
@@ -36,10 +37,10 @@ async function TotalYear({ year }: { year: number }): Promise<JSX.Element> {
         <h2 className="font-medium text-gray-500 ">{item.year}</h2>
         <div className="text-gray-500">
           {/* Only display two numbers */}
-          Hva vi betalte til Tibber: {item.paidToTibber}
+          Hva vi betalte til Tibber: {item?.paidToTibber}
         </div>
         <div className="font-semibold text-gray-500">
-          Hva vi fikk igjen fra strømstøtten {item.powerSupport}
+          Hva vi fikk igjen fra strømstøtten {item?.powerSupport}
         </div>
         <div className="text-gray-500">
           Hva vi faktisk betalte i strøm: {whatWePaid.toFixed(2)}

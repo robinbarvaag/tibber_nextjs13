@@ -19,6 +19,10 @@ async function getData(year: string) {
     throw new Error("Failed to fetch data");
   }
 
+  if (res === undefined) {
+    return undefined;
+  }
+
   return res.json();
 }
 
@@ -38,7 +42,11 @@ export default async function Page({ params }: { params: { year: string } }) {
       >
         Back
       </Link>
-      {data.map((monthInfo, index) => {
+      {data?.map((monthInfo, index) => {
+        console.log(monthInfo);
+        if (monthInfo) {
+          return null;
+        }
         const progress =
           (monthInfo?.powerSupport?.toFixed(2) /
             monthInfo?.paidToTibber?.toFixed(2)) *
@@ -53,7 +61,8 @@ export default async function Page({ params }: { params: { year: string } }) {
         else indicatorColor = colors.green[600];
 
         const whatWePaid =
-          monthInfo.paidToTibber.toFixed(2) - monthInfo.powerSupport.toFixed(2);
+          monthInfo?.paidToTibber.toFixed(2) -
+          monthInfo?.powerSupport.toFixed(2);
 
         return (
           <div key={index} className="col-span-6 flex flex-row justify-between">
@@ -61,11 +70,11 @@ export default async function Page({ params }: { params: { year: string } }) {
               <h2 className="font-medium text-gray-500 ">{monthInfo.month}</h2>
               <div className="text-gray-500">
                 {/* Only display two numbers */}
-                Hva vi betalte til Tibber: {monthInfo.paidToTibber.toFixed(2)}
+                Hva vi betalte til Tibber: {monthInfo?.paidToTibber.toFixed(2)}
               </div>
               <div className="font-semibold text-gray-500">
                 Hva vi fikk igjen fra strømstøtten{" "}
-                {monthInfo.powerSupport.toFixed(2)}
+                {monthInfo?.powerSupport.toFixed(2)}
               </div>
               <div className="text-gray-500">
                 Hva vi faktisk betalte i strøm: {whatWePaid.toFixed(2)}
