@@ -49,6 +49,7 @@ export default async function index(
       headers: {
         "Content-Type": "application/json",
       },
+      next: { revalidate: 40 },
     }
   );
 

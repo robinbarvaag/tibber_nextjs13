@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { year: string } }) {
   return (
     <div className="grid grid-cols-6 gap-x-6 gap-y-3">
       <Link
-        className="bg-gray-500 text-white font-medium flex p-2 rounded-lg justify-items-center"
+        className="bg-gray-500 text-white font-medium flex p-2 px-5 rounded-lg justify-center"
         href="/tibber"
       >
         Back

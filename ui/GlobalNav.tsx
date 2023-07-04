@@ -20,12 +20,8 @@ export function GlobalNav() {
           className="group flex w-full items-center gap-x-2.5"
           onClick={close}
         >
-          <div className="h-7 w-7 rounded-full border border-white/30 group-hover:border-white/50">
-            <Logo />
-          </div>
-
           <h3 className="font-semibold tracking-wide text-gray-400 group-hover:text-gray-50">
-            App Directory <span className="Work in progress">(WIP)</span>
+            ROBBA`S PLAYGROUND
           </h3>
         </Link>
       </div>
