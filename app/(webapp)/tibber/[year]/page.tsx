@@ -19,6 +19,10 @@ async function getData(year: string) {
     throw new Error("Failed to fetch data");
   }
 
+  if (res === undefined) {
+    return undefined;
+  }
+
   return res.json();
 }
 
