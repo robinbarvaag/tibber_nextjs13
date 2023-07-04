@@ -19,10 +19,6 @@ async function getData(year: string) {
     throw new Error("Failed to fetch data");
   }
 
-  if (res === undefined) {
-    return undefined;
-  }
-
   return res.json();
 }
 
@@ -43,8 +39,7 @@ export default async function Page({ params }: { params: { year: string } }) {
         Back
       </Link>
       {data?.map((monthInfo, index) => {
-        console.log(monthInfo);
-        if (monthInfo) {
+        if (monthInfo === undefined) {
           return null;
         }
         const progress =
