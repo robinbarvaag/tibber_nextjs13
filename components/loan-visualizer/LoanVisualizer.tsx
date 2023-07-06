@@ -185,6 +185,25 @@ const LoanVisualizer: React.FC<LoanVisualizerProps> = ({}) => {
     return formatCurrency(totalPayment - loanAmountWithFees);
   };
 
+  const calculateNextPayment = (loan: Loan) => {
+    const monthlyPayment = parseFloat(calculateMonthlyPayment(loan, 1));
+    console.log(monthlyPayment);
+    const numPayments = loan.paymentTime;
+    const extraPaymentTotal = loan.extraPayments.reduce(
+      (total, payment) => total + payment,
+      0
+    );
+    return (monthlyPayment + extraPaymentTotal).toFixed(2);
+  };
+
+  const calculateNextPaymentGroup = (loans: Loan[]) => {
+    const nextPayment = loans.reduce(
+      (total, loan) => total + parseFloat(calculateNextPayment(loan)),
+      0
+    );
+    return formatCurrency(nextPayment);
+  };
+
   const calculateTotalPayment = (loan: Loan, format: boolean = false) => {
     const monthlyPayment = parseFloat(
       calculateMonthlyPayment(loan, loan.paymentTime)
@@ -202,7 +221,7 @@ const LoanVisualizer: React.FC<LoanVisualizerProps> = ({}) => {
     return formatCurrency(totalPayment - loanAmountWithFees);
   };
 
-  const generateAmortizationTable = (loan: Loan, addTotal: false) => {
+  const generateAmortizationTable = (loan: Loan, addTotal: boolean = false) => {
     const amortizationTable: any[] = [];
     const startDate = new Date();
     const currentDate = new Date(
@@ -374,6 +393,11 @@ const LoanVisualizer: React.FC<LoanVisualizerProps> = ({}) => {
                 Total interest for this group:{" "}
                 {calculateInterestCostGroup(loansForGroup)}
               </div>
+
+              <div>
+                What should we pay next month?{" "}
+                {calculateNextPaymentGroup(loansForGroup)}
+              </div>
               <div className="grid grid-cols-12 gap-5">
                 {loansForGroup.map((loan) => {
                   let tableContent: any[] = [];
@@ -487,7 +511,7 @@ const LoanVisualizer: React.FC<LoanVisualizerProps> = ({}) => {
                         <div className="col-span-2">Principal Payment</div>
                         <div className="col-span-2">Total Payment</div>
                         <div className="col-span-2">Remaining Loan Amount</div>
-                        {generateAmortizationTable(loan).map((row) => (
+                        {generateAmortizationTable(loan, true).map((row) => (
                           <>
                             <div className="col-span-2">{row.month}</div>
                             <div className="col-span-2">
