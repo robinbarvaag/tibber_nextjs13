@@ -27,9 +27,16 @@ export default async function RootLayout({
     fallbackSettings;
 
   const layout = (
-    <html lang="en" className="[color-scheme:dark]">
+    <html
+      lang="en"
+      className="[color-scheme:dark]"
+      suppressHydrationWarning={true}
+    >
       <head />
-      <body className="overflow-y-scroll bg-gray-1100 bg-[url('/grid.svg')]">
+      <body
+        className="overflow-y-scroll bg-gray-1100"
+        suppressHydrationWarning={true}
+      >
         <GlobalNav />
         {preview && <PreviewBanner />}
         <div className="lg:pl-72">

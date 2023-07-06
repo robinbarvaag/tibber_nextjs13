@@ -24,6 +24,12 @@ export const demos: { name: string; items: Item[] }[] = [
         description:
           "Streaming data fetching from the server with React Suspense",
       },
+      {
+        name: "Loan",
+        slug: "loan",
+        description:
+          "Streaming data fetching from the server with React Suspense",
+      },
     ],
   },
 ];
