@@ -26,8 +26,9 @@ module.exports = {
           violet: "#7928CA",
         },
         theme1: {
-          primary: "#2E86AB",
-          secondary: "#E8E8E8",
+          primary: "#73683B",
+          primay100: "#AEA069",
+          secondary: "#B0A084",
           gray: "#FBFBFB",
         },
       },

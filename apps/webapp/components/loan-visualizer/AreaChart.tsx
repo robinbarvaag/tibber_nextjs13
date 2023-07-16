@@ -4,7 +4,6 @@ import { AreaClosed } from "@visx/shape";
 import { AxisLeft, AxisBottom, AxisScale } from "@visx/axis";
 import { LinearGradient } from "@visx/gradient";
 import { curveMonotoneX } from "@visx/curve";
-import { AppleStock } from "@visx/mock-data/lib/mocks/appleStock";
 
 // Initialize some variables
 const axisColor = "#fff";
@@ -24,8 +23,6 @@ const axisLeftTickLabelProps = {
 };
 
 // accessors
-const getDate = (d: AppleStock) => new Date(d.date);
-const getStockValue = (d: AppleStock) => d.close;
 const getMonth = (d: any) => new Date(d.month);
 const getValue = (d: any) => d.principalPayment;
 const getInterest = (d: any) => d.interestPayment;
@@ -58,6 +55,7 @@ export default function AreaChart({
   children?: React.ReactNode;
 }) {
   if (width < 10) return null;
+
   return (
     <Group left={left || margin.left} top={top || margin.top}>
       <LinearGradient
@@ -76,7 +74,7 @@ export default function AreaChart({
         yScale={yScale}
         strokeWidth={1}
         stroke="url(#gradient)"
-        fill="black"
+        fill="#bbf7d0"
         curve={curveMonotoneX}
         opacity={0.5}
       />
@@ -89,7 +87,7 @@ export default function AreaChart({
         yScale={yScale}
         strokeWidth={1}
         stroke="black"
-        fill="white"
+        fill="#fecaca"
         curve={curveMonotoneX}
         opacity={0.8}
       />
