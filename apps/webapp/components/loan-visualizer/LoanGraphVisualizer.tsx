@@ -6,15 +6,19 @@ import BaseBrush, {
   BaseBrushState,
   UpdateBrush,
 } from "@visx/brush/lib/BaseBrush";
+
 import { PatternLines } from "@visx/pattern";
 import { Group } from "@visx/group";
 import { LinearGradient } from "@visx/gradient";
 import { max, extent } from "d3-array";
 import { BrushHandleRenderProps } from "@visx/brush/lib/BrushHandle";
 import AreaChart from "./AreaChart";
+import ParentSize from "@visx/responsive/lib/components/ParentSize";
 
 import { LegendOrdinal, LegendItem, LegendLabel } from "@visx/legend";
 import { scaleOrdinal } from "@visx/scale";
+
+import { generateAmortizationTable } from "./loan-utils";
 
 // Initialize some variables
 const brushMargin = { top: 10, bottom: 15, left: 50, right: 20 };
@@ -75,6 +79,62 @@ export type BrushProps = {
   loan: any[];
   interestRate: number;
 };
+
+function GraphWrapper({ loan }) {
+  const ordinalColorScale = scaleOrdinal({
+    domain: ["Interest payment", "Principal payment"],
+    range: ["#bbf7d0", "#fecaca"],
+  });
+
+  const graphData = useMemo(
+    () => generateAmortizationTable(loan, false, null) as any[],
+    [loan]
+  );
+
+  const legendGlyphSize = 15;
+  return (
+    <>
+      <LegendDemo title="Info">
+        <LegendOrdinal
+          scale={ordinalColorScale}
+          labelFormat={(label) => `${label.toUpperCase()}`}
+        >
+          {(labels) => (
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              {labels.map((label, i) => (
+                <LegendItem key={`legend-quantile-${i}`} margin="0 5px">
+                  <svg width={legendGlyphSize} height={legendGlyphSize}>
+                    <rect
+                      fill={label.value}
+                      width={legendGlyphSize}
+                      height={legendGlyphSize}
+                      opacity={0.8}
+                    />
+                  </svg>
+                  <LegendLabel align="left" margin="0 0 0 4px">
+                    {label.text}
+                  </LegendLabel>
+                </LegendItem>
+              ))}
+            </div>
+          )}
+        </LegendOrdinal>
+      </LegendDemo>
+      <div style={{ height: "400px" }}>
+        <ParentSize className="graph-container" debounceTime={10}>
+          {({ width: visWidth, height: visHeight }) => (
+            <LoanGraphVisualizer
+              width={visWidth}
+              height={visHeight}
+              loan={graphData}
+              interestRate={loan.interestRate}
+            />
+          )}
+        </ParentSize>
+      </div>
+    </>
+  );
+}
 
 function LoanGraphVisualizer({
   compact = false,
@@ -166,13 +226,22 @@ function LoanGraphVisualizer({
     [yBrushMax, loan]
   );
 
-  const initialBrushPosition = useMemo(
-    () => ({
-      start: { x: brushDateScale(getMonth(loan[0])) },
-      end: { x: brushDateScale(getMonth(loan[100])) },
-    }),
-    [brushDateScale, loan]
-  );
+  const initialBrushPosition = useMemo(() => {
+    const loanStart = getMonth(loan[0]);
+    const loanEnd = getMonth(loan[loan.length / 3]);
+    if (loan.length > 0) {
+      return {
+        start: { x: brushDateScale(loanStart) },
+        end: { x: brushDateScale(loanEnd) },
+      };
+    }
+
+    // Return a default value if the loan array is empty
+    return {
+      start: { x: 0 },
+      end: { x: 0 },
+    };
+  }, [brushDateScale, loan]);
 
   // event handlers
   const handleClearClick = () => {
@@ -203,111 +272,72 @@ function LoanGraphVisualizer({
     }
   };
 
-  const ordinalColorScale = scaleOrdinal({
-    domain: ["Interest payment", "Principal payment"],
-    range: ["#bbf7d0", "#fecaca"],
-  });
-
-  const legendGlyphSize = 15;
-
   return (
-    <div>
-      <LegendDemo title="Info">
-        <LegendOrdinal
-          scale={ordinalColorScale}
-          labelFormat={(label) => `${label.toUpperCase()}`}
-        >
-          {(labels) => (
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              {labels.map((label, i) => (
-                <LegendItem key={`legend-quantile-${i}`} margin="0 5px">
-                  <svg width={legendGlyphSize} height={legendGlyphSize}>
-                    <rect
-                      fill={label.value}
-                      width={legendGlyphSize}
-                      height={legendGlyphSize}
-                      opacity={0.8}
-                    />
-                  </svg>
-                  <LegendLabel align="left" margin="0 0 0 4px">
-                    {label.text}
-                  </LegendLabel>
-                </LegendItem>
-              ))}
-            </div>
-          )}
-        </LegendOrdinal>
-      </LegendDemo>
-      <svg width={width} height={height}>
-        <LinearGradient
-          id={GRADIENT_ID}
-          from={background}
-          to={background2}
-          rotate={45}
-        />
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          fill={`url(#${GRADIENT_ID})`}
-          rx={14}
-        />
-        <AreaChart
-          hideBottomAxis={compact}
-          data={filteredStock}
-          width={width}
-          margin={{ ...margin, bottom: topChartBottomMargin }}
-          yMax={yMax}
-          xScale={dateScale}
-          yScale={stockScale}
-          gradientColor={background2}
-        />
+    <svg width={width} height={height}>
+      <LinearGradient
+        id={GRADIENT_ID}
+        from={background}
+        to={background2}
+        rotate={45}
+      />
+      <rect
+        x={0}
+        y={0}
+        width={width}
+        height={height}
+        fill={`url(#${GRADIENT_ID})`}
+        rx={14}
+      />
+      <AreaChart
+        hideBottomAxis={compact}
+        data={filteredStock}
+        width={width}
+        margin={{ ...margin, bottom: topChartBottomMargin }}
+        yMax={yMax}
+        xScale={dateScale}
+        yScale={stockScale}
+        gradientColor={background2}
+      />
 
-        <AreaChart
-          hideBottomAxis
-          hideLeftAxis
-          data={loan}
-          width={width}
-          yMax={yBrushMax}
+      <AreaChart
+        hideBottomAxis
+        hideLeftAxis
+        data={loan}
+        width={width}
+        yMax={yBrushMax}
+        xScale={brushDateScale}
+        yScale={brushStockScale}
+        margin={brushMargin}
+        top={topChartHeight + topChartBottomMargin + margin.top}
+        gradientColor={background2}
+      >
+        <PatternLines
+          id={PATTERN_ID}
+          height={8}
+          width={8}
+          stroke={accentColor}
+          strokeWidth={1}
+          orientation={["diagonal"]}
+        />
+        <Brush
           xScale={brushDateScale}
           yScale={brushStockScale}
+          width={xBrushMax}
+          height={yBrushMax}
           margin={brushMargin}
-          top={topChartHeight + topChartBottomMargin + margin.top}
-          gradientColor={background2}
-        >
-          <PatternLines
-            id={PATTERN_ID}
-            height={8}
-            width={8}
-            stroke={accentColor}
-            strokeWidth={1}
-            orientation={["diagonal"]}
-          />
-          <Brush
-            xScale={brushDateScale}
-            yScale={brushStockScale}
-            width={xBrushMax}
-            height={yBrushMax}
-            margin={brushMargin}
-            handleSize={8}
-            innerRef={brushRef}
-            resizeTriggerAreas={["left", "right"]}
-            brushDirection="horizontal"
-            initialBrushPosition={initialBrushPosition}
-            onChange={onBrushChange}
-            onClick={() => setFilteredStock(loan)}
-            selectedBoxStyle={selectedBrushStyle}
-            useWindowMoveEvents
-            renderBrushHandle={(props) => <BrushHandle {...props} />}
-          />
-        </AreaChart>
-      </svg>
-      {/* <div style={{ position: "absolute", bottom: "-110px" }}>
-        <button onClick={handleClearClick}>Clear</button>&nbsp;
-        <button onClick={handleResetClick}>Reset</button>
-      </div> */}
-    </div>
+          handleSize={8}
+          innerRef={brushRef}
+          resizeTriggerAreas={["left", "right"]}
+          brushDirection="horizontal"
+          initialBrushPosition={initialBrushPosition}
+          onChange={onBrushChange}
+          onClick={() => setFilteredStock(loan)}
+          selectedBoxStyle={selectedBrushStyle}
+          useWindowMoveEvents
+          renderBrushHandle={(props) => <BrushHandle {...props} />}
+        />
+      </AreaChart>
+    </svg>
   );
 }
 // We need to manually offset the handles for them to be rendered at the right position
@@ -330,4 +360,4 @@ function BrushHandle({ x, height, isBrushActive }: BrushHandleRenderProps) {
   );
 }
 
-export default LoanGraphVisualizer;
+export default GraphWrapper;

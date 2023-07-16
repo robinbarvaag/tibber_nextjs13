@@ -1,0 +1,87 @@
+import classes from "./LoanVisualizer.module.scss";
+import {
+  formatCurrency,
+  calculateTotalPaymentGroup,
+  calculateInterestCostGroup,
+  calculateTotalPaymentGroupWithExtra,
+  calculateInterestCostGroupWithExtra,
+  calculateNextPaymentGroup,
+} from "./loan-utils";
+
+const LoanGroupSummary = ({ name, loans }) => {
+  const debtFreeDate = new Date();
+
+  return (
+    <>
+      <h2 className="my-8 font-bold text-4xl text-center">{name}</h2>
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-6 bg-gray-900 rounded-lg p-4">
+          <h2 className="underline font-bold">Default for this loan group</h2>
+          <div className="my-3">
+            Total payment:{" "}
+            <span className="underline font-bold">
+              {formatCurrency(calculateTotalPaymentGroup(loans))}
+            </span>
+          </div>
+          <div className="my-3">
+            Total interest:{" "}
+            <span className="underline font-bold">
+              {formatCurrency(calculateInterestCostGroup(loans))}
+            </span>
+          </div>
+        </div>
+        <div className="col-span-6 bg-gray-900 rounded-lg p-4">
+          <h2 className="underline font-bold">
+            After extra payment for this loan group
+          </h2>
+          <div className="my-3">
+            Total payment:{" "}
+            <span className="underline font-bold">
+              {formatCurrency(calculateTotalPaymentGroupWithExtra(loans))}
+            </span>
+          </div>
+
+          <div className="my-3">
+            Total interest:{" "}
+            <span className="underline font-bold">
+              {formatCurrency(calculateInterestCostGroupWithExtra(loans))}
+            </span>
+          </div>
+        </div>
+
+        <div className="col-span-12 text-center my-5">
+          Difference in interest after extra payment:{" "}
+          {formatCurrency(
+            calculateInterestCostGroup(loans) -
+              calculateInterestCostGroupWithExtra(loans)
+          )}
+        </div>
+      </div>
+
+      <div className="bg-orange-400 text-black font-bold text-center p-3 mt-3 rounded-xl">
+        What should we pay next month?{" "}
+        {formatCurrency(calculateNextPaymentGroup(loans))}
+      </div>
+
+      <div className="bg-green-800  font-bold text-center p-3 mt-3 rounded-xl">
+        <div>DEBT FREE</div>{" "}
+        <div>
+          {debtFreeDate.toLocaleDateString("nb-NO", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </div>
+        <div className={classes["container"]}>
+          <div className={classes["pyro"]}>
+            <div className={classes["before"]}></div>
+            <div className={classes["after"]}></div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default LoanGroupSummary;
