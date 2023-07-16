@@ -1,3 +1,4 @@
+import { useMemo, useState, useEffect } from "react";
 import classes from "./LoanVisualizer.module.scss";
 import {
   formatCurrency,
@@ -6,10 +7,54 @@ import {
   calculateTotalPaymentGroupWithExtra,
   calculateInterestCostGroupWithExtra,
   calculateNextPaymentGroup,
+  generateAmortizationTable,
 } from "./loan-utils";
 
 const LoanGroupSummary = ({ name, loans }) => {
-  const debtFreeDate = new Date();
+  //find loan with the highest loan amount
+  const lastMonthForEachLoan = useMemo(() => {
+    return loans.map((loan) => {
+      const amortizationTable = generateAmortizationTable(
+        loan,
+        false,
+        null
+      ) as any;
+      return amortizationTable[amortizationTable.length - 1];
+    });
+  }, [loans]);
+
+  //check which loan has the highest year and month
+  let highestYear = 0;
+  let highestMonth = 0;
+  let highestObject: any = null;
+
+  for (const obj of lastMonthForEachLoan) {
+    const dateString = obj.month;
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    if (year > highestYear || (year === highestYear && month > highestMonth)) {
+      highestYear = year;
+      highestMonth = month;
+      highestObject = obj;
+    }
+  }
+
+  // State to control the display of the commented-out code
+  const [showAnimation, setShowAnimation] = useState(false);
+
+  useEffect(() => {
+    setShowAnimation(true);
+
+    const timer = setTimeout(() => {
+      setShowAnimation(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [highestObject]);
 
   return (
     <>
@@ -66,19 +111,21 @@ const LoanGroupSummary = ({ name, loans }) => {
       <div className="bg-green-800  font-bold text-center p-3 mt-3 rounded-xl">
         <div>DEBT FREE</div>{" "}
         <div>
-          {debtFreeDate.toLocaleDateString("nb-NO", {
+          {new Date(highestObject?.month ?? "").toLocaleDateString("nb-NO", {
             weekday: "long",
             year: "numeric",
             month: "long",
             day: "numeric",
           })}
         </div>
-        <div className={classes["container"]}>
-          <div className={classes["pyro"]}>
-            <div className={classes["before"]}></div>
-            <div className={classes["after"]}></div>
+        {showAnimation && (
+          <div className={classes["container"]}>
+            <div className={classes["pyro"]}>
+              <div className={classes["before"]}></div>
+              <div className={classes["after"]}></div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

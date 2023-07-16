@@ -88,18 +88,20 @@ const NewLoan = ({ loans, loanGroups, setLoans, setLoanGroups }) => {
             id="newLoanGroupName"
           />
         </div>
-        <button
-          className="bg-theme1-primary hover:bg-theme1-primay100 text-white font-bold py-2 px-4 rounded-full mt-5"
-          onClick={addLoanGroup}
-        >
-          Add Loan group
-        </button>
-        <button
-          className="bg-theme1-primary hover:bg-theme1-primay100 text-white font-bold py-2 px-4 rounded-full mt-5"
-          onClick={onSubmit}
-        >
-          Lagre / oppdatere info
-        </button>
+        <div className="flex flex-row gap-5">
+          <button
+            className="bg-theme1-primary hover:bg-theme1-primay100 text-white font-bold py-2 px-4 rounded-full mt-5"
+            onClick={addLoanGroup}
+          >
+            Add Loan group
+          </button>
+          <button
+            className="bg-theme1-primary hover:bg-theme1-primay100 text-white font-bold py-2 px-4 rounded-full mt-5"
+            onClick={onSubmit}
+          >
+            Lagre / oppdatere info
+          </button>
+        </div>
       </div>
       <div>
         {loanGroups.length > 0 && (

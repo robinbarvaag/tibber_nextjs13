@@ -10,35 +10,36 @@ const LoanTableVisualizer = ({ loan }) => {
   };
 
   return (
-    <>
+    <div className="py-6">
       <button
-        className="bg-theme1-primary hover:bg-theme1-primay100 text-white font-bold py-2 px-4 rounded-full mt-5"
+        className="bg-theme1-primary hover:bg-theme1-primay100 text-white font-bold py-2 px-4 rounded-full my-5"
         onClick={() => toggleTableVisibility(loan.id)}
       >
         {displayTable ? "Hide" : "Show"} table
       </button>
       <div
-        className={cn("relative overflow-x-auto shadow-md sm:rounded-lg py-6", {
+        className={cn("relative overflow-x-auto shadow-md sm:rounded-lg", {
           [classes["table-container"]]: true,
           [classes["table-container__visible"]]: displayTable,
         })}
+        style={{ maxHeight: "400px" }}
       >
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700">
+          <thead className="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 ">
             <tr>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 sticky top-0 bg-black">
                 Month
               </th>
-              <th scope="col" className="px-2 py-3">
+              <th scope="col" className="px-2 py-3 sticky top-0 bg-black">
                 Interest Payment
               </th>
-              <th scope="col" className="px-2 py-3">
+              <th scope="col" className="px-2 py-3 sticky top-0 bg-black">
                 Principal Payment
               </th>
-              <th scope="col" className="px-2 py-3">
+              <th scope="col" className="px-2 py-3 sticky top-0 bg-black">
                 Total Payment
               </th>
-              <th scope="col" className="px-2 py-3">
+              <th scope="col" className="px-2 py-3 sticky top-0 bg-black">
                 Remaining Loan Amount
               </th>
             </tr>
@@ -74,7 +75,7 @@ const LoanTableVisualizer = ({ loan }) => {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 };
 
