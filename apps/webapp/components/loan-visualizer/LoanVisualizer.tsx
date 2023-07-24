@@ -15,10 +15,9 @@ import {
   calculateInterestCostWithExtra,
 } from "./loan-utils";
 
-const LoanVisualizer: React.FC<LoanVisualizerProps> = ({ data }) => {
+const LoanVisualizer: React.FC<LoanVisualizerProps> = (loanGroups) => {
   const [loans, setLoans] = useState<Loan[]>([]);
-  const [debtFreeDate, setDebtFreeDate] = useState<Date>(new Date("1/1/2500"));
-  const [loanGroups, setLoanGroups] = useState<LoanGroup[]>([]);
+  const [loanGroupss, setLoanGroups] = useState<LoanGroup[]>([]);
 
   const setLoandsHandler = (loans: Loan[]) => {
     setLoans(loans);
@@ -29,36 +28,8 @@ const LoanVisualizer: React.FC<LoanVisualizerProps> = ({ data }) => {
   };
 
   useEffect(() => {
-    const savedLoans = data.flatMap((user: any) => {
-      const savedLoans = JSON.parse(user.savedLoanJson);
-
-      return savedLoans.loanDetails.map((loan: any) => {
-        return {
-          id: loan.id,
-          paymentTimeYears: loan.paymentTimeYears,
-          paymentTimeMonths: loan.paymentTimeMonths,
-          loanAmount: loan.loanAmount,
-          extraPayments: loan.extraPayments,
-          extraPaymentEachMonth: loan.extraPaymentEachMonth,
-          fees: loan.fees,
-          insurance: loan.insurance,
-          interestRate: loan.interestRate,
-          gracePeriod: loan.gracePeriod,
-          loanGroupId: 1,
-        };
-      });
-    });
-
-    setLoans(savedLoans);
-
-    const loanGroups: LoanGroup[] = data.map((user: any) => {
-      return {
-        id: 1,
-        name: user.name,
-      };
-    });
-    setLoanGroups(loanGroups ?? []);
-  }, [data]);
+    setLoanGroups(loanGroups.loanGroups.loanGroups ?? []);
+  }, [loanGroups]);
 
   const updateObject = <T extends string | number>(
     event: T,
@@ -78,10 +49,20 @@ const LoanVisualizer: React.FC<LoanVisualizerProps> = ({ data }) => {
       return;
     }
 
-    const updatedLoans = loans.map((loan) =>
-      loan.id === loanId ? { ...loan, [attribute]: newValue } : loan
-    );
-    setLoans(updatedLoans);
+    //find loan on loangroup
+    const updatedLoans = loanGroupss.map((loanGroup) => {
+      const updatedLoans = loanGroup.loans.map((loan) =>
+        loan.id === loanId ? { ...loan, [attribute]: newValue } : loan
+      );
+
+      console.log(updatedLoans);
+      return { ...loanGroup, loans: updatedLoans };
+    });
+
+    // const updatedLoans = loans.map((loan) =>
+    //   loan.id === loanId ? { ...loan, [attribute]: newValue } : loan
+    // );
+    setLoanGroups(updatedLoans);
   };
 
   function calculateFutureValue(
@@ -121,24 +102,20 @@ const LoanVisualizer: React.FC<LoanVisualizerProps> = ({ data }) => {
     <div>
       <NewLoan
         loans={loans}
-        loanGroups={loanGroups}
+        loanGroups={loanGroupss}
         setLoans={setLoandsHandler}
         setLoanGroups={setLoanGroupsHandler}
       />
       <div className="grid grid-cols-12 gap-6">
-        {loanGroups.map((loanGroup, index) => {
-          const loansForGroup = loans?.filter(
-            (loan) => loan.loanGroupId === loanGroup.id
-          );
-
+        {loanGroupss.map((loanGroup, index) => {
           return (
             <div
               className="col-span-12 mt-5  border border-white rounded p-2"
               key={index}
             >
-              <LoanGroupSummary loans={loansForGroup} name={loanGroup.name} />
+              <LoanGroupSummary loans={loanGroup.loans} name={loanGroup.name} />
               <div className="grid grid-cols-12 gap-5">
-                {loansForGroup.map((loan) => {
+                {loanGroup.loans.map((loan) => {
                   return (
                     <div
                       className="mt-5 col-span-12 lg:col-span-6"

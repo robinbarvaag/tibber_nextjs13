@@ -42,7 +42,7 @@ const NewLoan = ({ loans, loanGroups, setLoans, setLoanGroups }) => {
 
   async function onSubmit() {
     const user = {
-      id: 1,
+      id: "clk7dr72c00006fedlzu5slau",
     };
     const response = await fetch(`/api/user/${user.id}/loan`, {
       method: "PUT",
@@ -50,7 +50,17 @@ const NewLoan = ({ loans, loanGroups, setLoans, setLoanGroups }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        loanDetails: loans,
+        paymentTimeYears: 30,
+        paymentTimeMonths: 0,
+        loanAmount: 10122025,
+        extraPaymentEachMonth: 0,
+        extraPayments: [],
+        fees: 70,
+        insurance: 0,
+        interestRate: 5.08,
+        loanGroupId: 1,
+        gracePeriod: 79,
+        userId: user.id,
       }),
     });
 
