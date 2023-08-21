@@ -20,5 +20,5 @@ interface Loan {
 }
 
 interface LoanVisualizerProps {
-  loanGroups: LoanGroup[];
+  loanGroups: any;
 }

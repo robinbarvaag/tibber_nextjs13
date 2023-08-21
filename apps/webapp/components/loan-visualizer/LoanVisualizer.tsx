@@ -28,7 +28,7 @@ const LoanVisualizer: React.FC<LoanVisualizerProps> = (loanGroups) => {
   };
 
   useEffect(() => {
-    setLoanGroups(loanGroups.loanGroups.loanGroups ?? []);
+    setLoanGroups(loanGroups.loanGroups?.loanGroups ?? []);
   }, [loanGroups]);
 
   const updateObject = <T extends string | number>(
@@ -55,7 +55,6 @@ const LoanVisualizer: React.FC<LoanVisualizerProps> = (loanGroups) => {
         loan.id === loanId ? { ...loan, [attribute]: newValue } : loan
       );
 
-      console.log(updatedLoans);
       return { ...loanGroup, loans: updatedLoans };
     });
 
@@ -121,6 +120,7 @@ const LoanVisualizer: React.FC<LoanVisualizerProps> = (loanGroups) => {
                       className="mt-5 col-span-12 lg:col-span-6"
                       key={loan.id}
                     >
+                      <button>Delete</button>
                       <SliderWrapper
                         value={loan.interestRate}
                         attribute="interestRate"

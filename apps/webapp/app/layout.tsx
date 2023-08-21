@@ -1,5 +1,6 @@
 import { Toaster } from "#/components/loan-visualizer/toaster";
 import { ThemeProvider } from "#/components/theme-provider";
+import "css";
 export default async function RootLayout({
   children,
 }: {
